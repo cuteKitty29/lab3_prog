@@ -1,4 +1,4 @@
-public class Creature{
+public class Creature implements Publisher, Subscriber{
     private State state;
     private String name;
     private boolean isSleep;
