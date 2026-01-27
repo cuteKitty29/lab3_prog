@@ -1,0 +1,3 @@
+public enum Stimul{
+    CRY, SMELL, SHAKE, CALM, DEATH, COMFORT_WITH_WORDS, THROWN
+}
