@@ -1,9 +1,15 @@
+import java.util.ArrayList;
+
 public class Creature implements Publisher, Subscriber{
-    private State state;
-    private String name;
-    private boolean isSleep;
-    private boolean isAlive;
-    private int fearLevel;
+    public ArrayList<Object> listObjectsHands;
+    public ArrayList<Subscriber> subscribers;  
+    public State state;
+    public final String name;
+    public boolean isSleep;
+    public boolean isAlive;
+    public int fearLevel;
+  //  public Stimul stimul;
+
 
     public Creature(String name, State state, boolean isSleep, int fearLevel){
         this.name = name;
@@ -14,23 +20,24 @@ public class Creature implements Publisher, Subscriber{
     }
 
 
-    public void subscribe(Object subscriber){
+    public void subscribe(Subscriber subscriber){
         this.subscribers.add(subscriber);
     }
 
-    public void unsubscribe(Object subscriber){
-        int indexObject = this.subscribers.getIndex(subscriber);
+    @Override
+    public void unsubscribe(Subscriber subscriber){
+        int indexObject = this.subscribers.indexOf(subscriber);
         this.subscribers.remove(indexObject);
     }
 
-    public void notifySubscribers(Stimul stumul){
+    public void notifySubscribers(Stimul stimul){
         for (Subscriber subscriber: this.subscribers){
             subscriber.update(stimul);
         }
     }
 
     public void update(Stimul stimul){
-        this.stimul = stimul;
+        react(stimul);
     }
 
     public String getName(){
@@ -52,89 +59,93 @@ public class Creature implements Publisher, Subscriber{
                     switch(this.state){
                         case CRY:
                             return Action.CRY;
-                            break;
                         case AGRESSIVE, FURIOUS:
                             return Action.SHOUT;
-                            break;
                         case PANIC:
                             return Action.GET_SCARED;
-                            break;
                     }
-        
-                    break;
 
                 case SMELL:
                     return Action.GET_SMELL;
-                    break;
 
                 case SHAKE:
                     switch(this.state){
                         case CRY, PANIC:
                             return Action.CRY;
-                            break;
                         case AGRESSIVE, FURIOUS:
                             return Action.SHOUT;
-                            break;
                         case CALM:
                             return Action.IGNORE;
-                            break;
                         
                     }
                 case CALM:
                     return Action.IGNORE;
-                    break;
                 case SHOUT:
                     switch(this.state){
                         case CRY, PANIC, CALM:
                             return Action.GET_SCARED;
-                            break;
                         case AGRESSIVE, FURIOUS:
                             return Action.SHOUT;
-                            break;
                     }
             } 
         }
         else{
-            System.out.println("Creature" + name + "is died!!!")
+            System.out.println("Creature" + name + "is died!!!");
         }
 
- 
+        return Action.IGNORE;    
     }
 
-    public doSmt(Action action){
+    public void doSmt(Action action){
         if (isAlive){
             switch (action){
                 case IGNORE:
-                    System.out.println(name + "ничего не делает");
-                    break;
+                    System.out.println(name + " do nothing");
 
                 case GET_SCARED:
-                    System.out.println("Creature " name + " got scared");
+                    System.out.println("Creature " + name + " got scared");
                     this.fearLevel += 10;
                     System.out.println("Creature " + name + "\'s level of  fear has risen");
-                    break;
                 case CRY:
+                    cry();
+                case SHOUT:
+                    shout();
 
             }
         }
         else{
-            System.out.println("Creature is died!!!")
+            System.out.println("Creature is died!!!");
         }
 
 
     }
 
-    public void die(){
+    private void die(){
         this.isAlive = false;
 
     }
-    public void cry(){
-        System.out.println("AAAAAAAAAA");
-        System.out.println("Creature " + name + " is crying!")
+    private void cry(){
+        System.out.println("UA UA UA UA");
+        System.out.println("Creature " + name + " is crying!");
+        this.state = State.CRY;
+        notifySubscribers(Stimul.CRY);
     }
 
-    @Overrite
+    private void shout(){
+        System.out.println("AAAAAAAA");
+        System.out.println("Creature " + name + " is shouting!");
+        notifySubscribers(Stimul.SHOUT);
+    }
+
+    @Override 
+    public boolean equals(Object obj){
+        if (obj instanceof Creature){
+            return true;
+        }
+        return false;
+    }
+    @Override
     public String toString(){
-        return "Creature" + name;
+        return "Creature " + name;
     }
 }

@@ -1,18 +1,27 @@
+import java.util.ArrayList;
+
+
 public class Child extends Human implements Subscriber, Publisher{
     private int cryPower;
-    private ArrayList<Object> subscribers;
+    private ArrayList<Subscriber> subscribers;
+
+    private static int id = 0;
+
+    private int selfId;
 
 
     public Child(String name, State state, boolean isSleep, int fearLevel){
-        super(String name, State state, boolean isSleep, int fearLevel);
-        this.subscribers = new ArrayList<Object>();
+        super(name, state, isSleep, fearLevel);
+        this.subscribers = new ArrayList<Subscriber>();
+        this.selfId = Child.id + 1;
+    }
 
-    public void subscribe(Object subscriber){
+    public void subscribe(Subscriber subscriber){
         this.subscribers.add(subscriber);
     }
 
-    public void unsubscribe(Object subscriber){
-        int indexObject = this.subscribers.getIndex(subscriber);
+    public void unsubscribe(Subscriber subscriber){
+        int indexObject = this.subscribers.indexOf(subscriber);
         this.subscribers.remove(indexObject);
     }
 
@@ -23,76 +32,95 @@ public class Child extends Human implements Subscriber, Publisher{
     }
 
     public void update(Stimul stimul){
-        this.stimul = stimul;
+        System.out.println("Update child");
+        if (stimul == Stimul.SHAKE){
+            System.out.println("IT IS ");
+        }
+
+        doSmt(react(stimul));
     }
 
 
 
-    @Overrite
+    @Override
     public Action react(Stimul stimul){
 
         switch (stimul){
 
             case CRY:
+                System.out.println("CRY");
+
                 return Action.GET_SCARED;
-                break;
                 
             case CALM:
+                System.out.println("CALM");
+
                 return Action.IGNORE;
-                break;
 
             case SHAKE:
+                System.out.println("SHAKE");
+
+
                 return Action.CRY_LOUD;
-                break;
 
             case THROWN:
+                System.out.println("THROWN");
+
                 return Action.DIE;
-                break;
 
 
             default:
+                System.out.println("DEFAULT");
+
                 System.out.println("the stimulus is not perceived");
                 return Action.IGNORE;
-                break;
         }
     }
 
-    @Overrite
-    public doSmt(Action action){
+    @Override
+    public void doSmt(Action action){
 
 
         switch (action){
             case IGNORE:
-                System.out.println(name + "ничего не делает");
-                break;
+                System.out.println(name + " do nothing");
 
             case GET_SCARED:
-                System.out.println(name + "испугался");
+                System.out.println(name + " has got scared");
                 this.fearLevel += 10;
-                System.out.println("Уровень страха у " + name + "повысился");
-                this.cry()
-                break;
+                System.out.println("The level fear of " + name + " has risen");
+                this.cry();
 
             case DIE:
-                this.die()
-                break;
+                this.die();
 
         }
     }
 
-    private void cry(){
-        if 
+    public void cry(){
+        System.out.println("AAAAAAAAA");
+        System.out.println("Child " + name + " is crying!");
+        notifySubscribers(Stimul.CRY);
     }
 
-    @Overrite
+  //  @Override
     private void die(){
         notifySubscribers(Stimul.DEATH);
-        for (Object subscriber: subscribers){
+        for (Subscriber subscriber: subscribers){
             unsubscribe(subscriber);
         }
     }
 
-    @Overritepublic String toString(){
+    @Override 
+    public boolean equals(Object obj){
+        if (obj instanceof Child){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString(){
         return "Child" + name;
     }
 }

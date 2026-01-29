@@ -1,3 +1,3 @@
 interface Subscriber{
-    void update(Stimul stimul)
+    void update(Stimul stimul);
 }

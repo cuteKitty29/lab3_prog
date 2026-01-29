@@ -1,7 +1,31 @@
-public class Human extends Creature{
+import java.util.ArrayList;
+
+public class Human extends Creature implements Subscriber, Publisher{
+    public ArrayList<Object> listObjectsHands;
+    public ArrayList<Subscriber> subscribers;  
 
     public Human(String name, State state, boolean isSleep, int fearLevel){
-        super(String name, State state, boolean isSleep, int fearLevel);
+        super(name, state, isSleep, fearLevel);
+    }
+
+
+    public void subscribe(Subscriber subscriber){
+        this.subscribers.add(subscriber);
+    }
+
+    public void unsubscribe(Subscriber subscriber){
+        int indexObject = this.subscribers.indexOf(subscriber);
+        this.subscribers.remove(indexObject);
+    }
+
+    public void notifySubscribers(Stimul stimul){
+        for (Subscriber subscriber: this.subscribers){
+            subscriber.update(stimul);
+        }
+    }
+
+    public void update(Stimul stimul){
+        react(stimul);
     }
 
     public class Eyes{
@@ -10,8 +34,8 @@ public class Human extends Creature{
         private boolean isEyeOpen;
 
 
-        public EyeColor[] getEyeColor(){
-            return this.eyeColor[];
+        public EyeColor[][] getEyeColor(){
+            return this.eyeColor;
         }
 
         public int getClarity(){
@@ -32,47 +56,58 @@ public class Human extends Creature{
         }
     }
 
-    @Overrite
+    @Override
     public Action react(Stimul stimul){
 
         switch (stimul){
 
             case CRY:
                 return Action.GET_SCARED;
-                break;
 
             case CALM:
                 return Action.IGNORE;
-                break;
         }
+        return Action.IGNORE;
     }
 
-    @Overrite
-    public doSmt(Action action){
+    @Override
+    public void doSmt(Action action){
         if (isAlive){
             switch (action){
                 case IGNORE:
-                    System.out.println(name + "ничего не делает");
-                    break;
+                    System.out.println(name + " do nothing");
 
                 case GET_SCARED:
-                    System.out.println(name + "испугался");
+                    System.out.println(name + " has got scared");
                     this.fearLevel += 10;
-                    System.out.println("Уровень страха у " + name + "повысился");
-                    break;
+                    System.out.println("The fear level of " + name + " has risen");
             }
         }
         else{
-            System.out.println("Creature ia died!!!")
+            System.out.println("Creature ia died!!!");
         }
 
 
     }
-    @Overrite
+    
     private void die(){
         notifySubscribers(Stimul.DEATH);
-        for (Object subscriber: subscribers){
+        for (Subscriber subscriber: subscribers){
             unsubscribe(subscriber);
         }
     }
+
+    @Override 
+    public boolean equals(Object obj){
+        if (obj instanceof Human){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString(){
+        return "Human " + name;
+    }
 }
+

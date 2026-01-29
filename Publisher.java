@@ -1,6 +1,6 @@
 interface Publisher{
-    void subscribe(Subscriber);
-    void unsubsribe(Subscriber);
+    void subscribe(Subscriber subscriber);
+    void unsubscribe(Subscriber subscribe);
     void notifySubscribers(Stimul stimul);
 
 }
