@@ -3,5 +3,8 @@ public enum State{
     AGRESSIVE,
     FURIOUS,
     PANIC,
-    CALM
+    CALM,
+    SLEEP,
+    IGNORE
+
 }

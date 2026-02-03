@@ -5,7 +5,12 @@ public class Adult extends Human implements Subscriber, Publisher{
     private int disgustLevel;
     private int panicLevel;
     private ArrayList<Object> listObjectsHands;
-    private ArrayList<Subscriber> subscribers;  
+    private ArrayList<Subscriber> subscribers;
+    private State state;
+    private final String name;
+    private boolean isSleep;
+    private boolean isAlive;
+    private int fearLevel;  
 
     public Adult(String name, State state, boolean isSleep, int fearLevel){
         super(name, state, isSleep, fearLevel);
@@ -35,45 +40,50 @@ public class Adult extends Human implements Subscriber, Publisher{
         }
         for (Subscriber subscriber: this.subscribers){
             subscriber.update(stimul);
-
         }
     }
 
     public void update(Stimul stimul){
         System.out.println("Update adult");
-        doSmt(react(stimul));
+        react(stimul);
     }
 
     @Override
-    public Action react(Stimul stimul){
+    public void react(Stimul stimul){
 
         switch (stimul){
 
             case CRY:
                 System.out.println("Stimul CRY ADULT REACT");
                 if (selfControl > 10){
-                    return Action.COMFORT;
+                    tryComfort();
+                    break;
                 }
                 else{
-                    return Action.THROW;
+                    throwChild();
+                    break;
                 }
 
             case SHOUT:
-                switch(this.state){
+                switch(state){
                     case AGRESSIVE:
-                        return Action.SHAKE;
+                        shake();
+                        break;
                     case FURIOUS:
-                        return Action.THROW;
+                        throwChild();
+                        break;
                     case PANIC:
-                        return Action.GET_SCARED;
+                        getScared();
+                        break;
                     case CALM:
-                        return Action.COMFORT;
+                        tryComfort();
                 }
 
 
                 
             case CALM:
-                return Action.IGNORE;
+                ignore();
+                break()
 
             default:
                 System.out.println("the stimulus is not perceived");
@@ -81,31 +91,6 @@ public class Adult extends Human implements Subscriber, Publisher{
         }
     }
 
-    @Override
-    public void doSmt(Action action){
-
-
-        switch (action){
-            case IGNORE:
-                System.out.println(name + " do nothing");
-                break;
-
-            case GET_SCARED:
-                System.out.println(name + " got scared");
-                this.fearLevel += 10;
-                System.out.println("The level fear of " + name + " has risen");
-                break;
-
-            case COMFORT:
-                this.tryComfort();  
-                break;
-            
-            case THROW:
-                this.throwChild();
-                break;
-
-        }
-    }
 
     private void comrfortWords(){
         System.out.println(name + " try to comfort with words");
@@ -117,7 +102,12 @@ public class Adult extends Human implements Subscriber, Publisher{
         shake();
     }
 
-    private void shake(){
+    public void haveImpression(){
+        System.out.println(toString + " has an impression");
+    }
+
+    
+    public void shake(){
         System.out.println("Adult " + name + " is shaking now!");
         notifySubscribers(Stimul.SHAKE);
     }

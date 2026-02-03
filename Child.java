@@ -4,16 +4,20 @@ import java.util.ArrayList;
 public class Child extends Human implements Subscriber, Publisher{
     private int cryPower;
     private ArrayList<Subscriber> subscribers;
-
-    private static int id = 0;
-
-    private int selfId;
+    private State state;
+    private  String name;
+    private boolean isSleep;
+    private boolean isAlive;
+    private int fearLevel;  
+    private Nose childNose;
+    private Eyes childEyes;
 
 
     public Child(String name, State state, boolean isSleep, int fearLevel){
         super(name, state, isSleep, fearLevel);
         this.subscribers = new ArrayList<Subscriber>();
-        this.selfId = Child.id + 1;
+        childNose = new Nose();
+        childEyes = new Eyes();
     }
 
     public void subscribe(Subscriber subscriber){
@@ -36,65 +40,46 @@ public class Child extends Human implements Subscriber, Publisher{
         if (stimul == Stimul.SHAKE){
             System.out.println("IT IS ");
         }
-
-        doSmt(react(stimul));
+        react(stimul);
     }
 
 
 
     @Override
-    public Action react(Stimul stimul){
+    public void react(Stimul stimul){
 
         switch (stimul){
 
             case CRY:
-                System.out.println("CRY");
-
-                return Action.GET_SCARED;
+                getScared();
+                break;
                 
-            case CALM:
-                System.out.println("CALM");
-
-                return Action.IGNORE;
+            case CALM:                
+                ignore();
+                break;
 
             case SHAKE:
-                System.out.println("SHAKE");
-
-
-                return Action.CRY_LOUD;
+                cry();
 
             case THROWN:
-                System.out.println("THROWN");
-
-                return Action.DIE;
+                die();
+                break;
 
 
             default:
                 System.out.println("DEFAULT");
 
                 System.out.println("the stimulus is not perceived");
-                return Action.IGNORE;
+                ignore();
         }
     }
 
     @Override
-    public void doSmt(Action action){
-
-
-        switch (action){
-            case IGNORE:
-                System.out.println(name + " do nothing");
-
-            case GET_SCARED:
-                System.out.println(name + " has got scared");
-                this.fearLevel += 10;
-                System.out.println("The level fear of " + name + " has risen");
-                this.cry();
-
-            case DIE:
-                this.die();
-
-        }
+    public void wakeUp(){
+        System.out.println(toString() + " has woken up");
+        changeState(State.CALM);
+        childNose.wakeUp();
+        childEyes.openEyes();
     }
 
     public void cry(){
