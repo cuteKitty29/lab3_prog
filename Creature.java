@@ -9,6 +9,7 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
     private boolean isAlive;
     private int fearLevel;
     private final int ID;
+    private int freezingLevel;
 
 
     public Creature(String name, State state, boolean isSleep, int fearLevel){
@@ -18,6 +19,7 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
         this.isSleep = isSleep;
         this.fearLevel = fearLevel;
         this.ID = MyObject.maxID++;
+        this.freezingLevel = 0;
     }
 
 
@@ -50,6 +52,13 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
 
     public State getState(){
         return state;
+    }
+
+    public ArrayList<Smell> stink(){
+        for (Smell s : smells) {
+            System.out.println(this + " skinks " + s);                    
+        }
+        return smells;
     }
 
     public void wakeUp(){
@@ -121,6 +130,7 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
     public ArrayList<Smell> getSmell(){
         return smells;
     }
+
 
     public void ignore(){
         System.out.println("Creature" + name + " does nothing");

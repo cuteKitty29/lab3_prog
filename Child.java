@@ -17,7 +17,7 @@ public class Child extends Human implements Subscriber, Publisher{
         super(name, state, isSleep, fearLevel);
         this.subscribers = new ArrayList<Subscriber>();
         childNose = new Nose();
-        childEyes = new Eyes();
+        childEyes = new Eyes(30, new Nothing());
     }
 
     public void subscribe(Subscriber subscriber){

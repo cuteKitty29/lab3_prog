@@ -10,6 +10,7 @@ public class Human extends Creature implements Subscriber, Publisher{
     private  Nose humanNose;
     private  Eyes humanEyes;
     private  int ID;
+    private int freezingLevel;
 
     public Human(String name, State state, boolean isSleep, int fearLevel){
         super(name, state, isSleep, fearLevel);
@@ -41,8 +42,19 @@ public class Human extends Creature implements Subscriber, Publisher{
     public class Eyes{
         private EyeColor[] eyeColor;
         private int clarity = 0;
-        private boolean isEyeOpen = false;
+        private boolean isEyeOpen = true;
         private MyObject target;
+
+        public Eyes(){
+            clarity = 0;
+            isEyeOpen = false;
+            target = new Nothing();
+        }
+
+        public Eyes(int clr, MyObject tar){
+            clarity = clr;
+            target = tar;
+        }
 
         public void openEyes(){
             System.out.println("Eyes is open");
@@ -59,6 +71,10 @@ public class Human extends Creature implements Subscriber, Publisher{
             return target;
         }
 
+        public boolean isObjectTarget(MyObject obj){
+            return target.equals(obj);
+        }
+
         public void changeTarget(MyObject obj){
             target = obj;
             System.out.println(toString() + "\' eyes\' target was changed on" + obj.toString());
@@ -69,7 +85,7 @@ public class Human extends Creature implements Subscriber, Publisher{
         }
 
 
-        public String getClarity(){
+        public void getClarity(){
             if (clarity > 50){
                 System.out.println("The eyes of " + toString() + "perceive everything. The clarity is " + clarity);
             }
@@ -84,10 +100,12 @@ public class Human extends Creature implements Subscriber, Publisher{
     public class Nose{
         private int sensitivity;
         private boolean isSleep;
+        private MyObject target;
 
         public Nose(){
             sensitivity = 0;
             isSleep = true;
+            target = new Nothing();
         }
 
         public void wakeUp(){
@@ -123,6 +141,15 @@ public class Human extends Creature implements Subscriber, Publisher{
         public void swell(){
             sensitivity += 20;
         }
+
+        public MyObject getTarget(){
+            return target;
+        }
+
+        public void changeTarget(MyObject obj){
+            target = obj;
+            System.out.println("The target was changed on" + obj.toString());
+        }
     }
 
     @Override
@@ -140,7 +167,22 @@ public class Human extends Creature implements Subscriber, Publisher{
                 ignore();
         }
     }
-    
+
+
+    public void sniff(Smellable obj){
+        System.out.println(this + " is sniffing");
+        ArrayList<Smell> receivedSmells = obj.getSmell();
+        if (!receivedSmells.isEmpty()){
+            System.out.println(this + " has sniffed something");
+            for (Smell s: receivedSmells){
+                System.out.println(s);
+            }
+        }
+        else{
+            System.out.println(this + " coudn not sniff anything");
+        }
+    }
+
 
     @Override
     public void wakeUp(){
@@ -154,6 +196,16 @@ public class Human extends Creature implements Subscriber, Publisher{
         for (Subscriber subscriber: subscribers){
             unsubscribe(subscriber);
         }
+    }
+
+    public void changeFreezingLevel(int change){
+        freezingLevel += change;
+    }
+
+    public void feelChill(){
+        changeFreezingLevel(70);
+        System.out.println(this + " feels the chill!");
+        
     }
 
     @Override 

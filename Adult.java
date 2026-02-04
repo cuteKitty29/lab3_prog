@@ -103,19 +103,28 @@ public class Adult extends Human implements Subscriber, Publisher{
     }
 
     public void haveImpression(){
-        System.out.println(toString + " has an impression");
+        System.out.println(toString() + " has an impression");
     }
 
+    public void expirienceSensation(){
+        System.out.println(this + " expirienced a sensation");
+    }
+
+    public void seem(){
+        System.out.println("It seems to " + this);
+    }
     
     public void shake(){
-        System.out.println("Adult " + name + " is shaking now!");
+        System.out.println(this + " is shaking now!");
         notifySubscribers(Stimul.SHAKE);
     }
 
     private void throwChild(){
-        System.out.println("adult " + name + " has thrown the child!!!");
+        System.out.println(this + " has thrown the child!!!");
         notifySubscribers(Stimul.THROWN);
     }
+
+
 
     @Override
     public boolean equals(Object obj){
