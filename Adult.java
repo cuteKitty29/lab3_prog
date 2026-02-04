@@ -7,7 +7,7 @@ public class Adult extends Human implements Subscriber, Publisher{
     private ArrayList<Object> listObjectsHands;
     private ArrayList<Subscriber> subscribers;
     private State state;
-    private final String name;
+    private  String name;
     private boolean isSleep;
     private boolean isAlive;
     private int fearLevel;  
@@ -83,11 +83,11 @@ public class Adult extends Human implements Subscriber, Publisher{
                 
             case CALM:
                 ignore();
-                break()
+                break;
 
             default:
                 System.out.println("the stimulus is not perceived");
-                return Action.IGNORE;
+                ignore();
         }
     }
 
@@ -122,6 +122,10 @@ public class Adult extends Human implements Subscriber, Publisher{
     private void throwChild(){
         System.out.println(this + " has thrown the child!!!");
         notifySubscribers(Stimul.THROWN);
+    }
+
+    public void setSmtOnTable(MyObject obj, Table tbl){
+        tbl.setSmt(obj);        
     }
 
 
