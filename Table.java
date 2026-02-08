@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Table extends  MyObject{
@@ -12,7 +13,11 @@ public class Table extends  MyObject{
         this.isTableFool = false;
     }
 
-    public void setSmt(MyObject obj){
+    public ArrayList<MyObject> getListOfContent(){
+        return listOfContent;
+    }
+
+    public void setSmt(MyObject obj) throws TableIsFullException{
         listOfContent.add(obj);
         if (!isTableFool){
             System.out.println(obj + " was set on the table");
@@ -21,7 +26,7 @@ public class Table extends  MyObject{
             }
         }
         else{
-            System.out.println("Table is fool!");
+            throw new TableIsFullException("Table is full now!!!");
         }
     }
 

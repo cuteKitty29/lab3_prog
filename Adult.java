@@ -1,10 +1,11 @@
 import java.util.ArrayList;
 
-public class Adult extends Human implements Subscriber, Publisher{
+public class Adult extends Human implements Subscriber, Publisher, Smellable{
     private int selfControl;
     private int disgustLevel;
     private int panicLevel;
     private ArrayList<Object> listObjectsHands;
+    private ArrayList<Smell> smells;
     private ArrayList<Subscriber> subscribers;
     private State state;
     private  String name;
@@ -15,6 +16,7 @@ public class Adult extends Human implements Subscriber, Publisher{
 
     public Adult(String name, State state, boolean isSleep, int fearLevel){
         super(name, state, isSleep, fearLevel);
+        this.name = name;
         this.disgustLevel = 0;
         this.panicLevel = 0;
         this.selfControl = 100;
@@ -54,47 +56,51 @@ public class Adult extends Human implements Subscriber, Publisher{
 
     @Override
     public void react(Stimul stimul){
+        try{
 
-        switch (stimul){
+            switch (stimul){
 
-            case CRY:
-                System.out.println("Stimul CRY ADULT REACT");
-                selfControl -= 50;
-                if (selfControl > 10){
-                    tryComfort();
-                    break;
-                }
-                else{
-                    throwChild();
-                    break;
-                }
-
-            case SHOUT:
-                switch(state){
-                    case AGRESSIVE:
-                        shake();
+                case CRY:
+                    System.out.println("Stimul CRY ADULT REACT");
+                    selfControl -= 50;
+                    if (selfControl > 10 && disgustLevel < 70){
+                        tryComfort();
                         break;
-                    case FURIOUS:
+                    }
+                    else{
                         throwChild();
                         break;
-                    case PANIC:
-                        getScared();
-                        break;
-                    case CALM:
-                        tryComfort();
-                }
+                    }
+
+                case SHOUT:
+                    switch(state){
+                        case AGRESSIVE:
+                            shake();
+                            break;
+                        case FURIOUS:
+                            throwChild();
+                            break;
+                        case PANIC:
+                            getScared();
+                            break;
+                        case CALM:
+                            tryComfort();
+                    }
 
 
-                
-            case CALM:
-                ignore();
-                break;
-            case DEATH:
-                cry();
+                    
+                case CALM:
+                    ignore();
+                    break;
 
-            default:
-                System.out.println("the stimulus is not perceived");
-                ignore();
+                default:
+                    System.out.println("the stimulus is not perceived");
+                    ignore();
+            }
+        }
+        catch (ChildDiedException e){
+            System.out.println(e.getMessage());
+            System.out.println("Level of self control of adult decreased to " + getSelfControl());
         }
     }
 
@@ -120,22 +126,42 @@ public class Adult extends Human implements Subscriber, Publisher{
     public void seem(){
         System.out.println("It seems to " + this);
     }
+
+    @Override
+    public ArrayList<Smell> getSmell(){
+        if (Math.random() > 40){
+            changeDisgustingLevel(20);
+        }
+        return smells;
+    }
     
     public void shake(){
         System.out.println(this + " is shaking now!");
         notifySubscribers(Stimul.SHAKE);
     }
 
-    private void throwChild(){
+    private void throwChild() throws ChildDiedException{
         System.out.println(this + " has thrown the child!!!");
-        notifySubscribers(Stimul.THROWN);
+        throw new ChildDiedException("Child was thrown and died!!!");
     }
 
     public void setSmtOnTable(MyObject obj, Table tbl){
-        tbl.setSmt(obj);        
+        try{
+          tbl.setSmt(obj);  
+        }
+        catch(TableIsFullException e){
+            System.out.println(e.getMessage());
+            System.out.println("There are on the table ");
+            for (MyObject elem : tbl.getListOfContent()) {
+                System.out.print(elem + " ");                
+            }
+        }      
     }
 
-
+    public void changeDisgustingLevel(int chn){
+        disgustLevel += chn;
+        System.out.println("Disgusting level of " + this + "changed on " + chn);
+    }
 
     @Override
     public boolean equals(Object obj){

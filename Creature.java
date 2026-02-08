@@ -47,7 +47,7 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
 
     public void changeState(State changeState){
         state = changeState;
-        System.out.println("The State of " + toString() + " was changed on" + state);
+        System.out.println("The State of " + this + " was changed on " + state);
     }
 
     public State getState(){
@@ -87,12 +87,23 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
                     break;
 
                 case SHAKE:
+                    double chance = Math.random();
                     switch(state){
                         case CRY, PANIC:
-                            cry();
+                            if (chance > 0.5){
+                                cry();
+                            }
+                            else{
+                                calmDown();
+                            }
                             break;
                         case AGRESSIVE, FURIOUS:
-                            shout();
+                            if (chance > 0.70){
+                                shout();
+                            }
+                            else{
+                                calmDown();
+                            }
                             break;
                         case CALM:
                             ignore();
@@ -166,6 +177,10 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
         System.out.println("Creature " + name + " is shouting!");
 
         notifySubscribers(Stimul.SHOUT);
+    }
+
+    public void calmDown(){
+        changeState(State.CALM);
     }
 
     @Override

@@ -15,6 +15,7 @@ public class Child extends Human implements Subscriber, Publisher{
 
     public Child(String name, State state, boolean isSleep, int fearLevel){
         super(name, state, isSleep, fearLevel);
+        this.name = name;
         this.subscribers = new ArrayList<Subscriber>();
         childNose = new Nose();
         EyeColor[] colors = new EyeColor[]{EyeColor.MIXED, EyeColor.OPAL_CREAM, EyeColor.OYSTER_GRAY};
@@ -59,12 +60,17 @@ public class Child extends Human implements Subscriber, Publisher{
                     break;
 
                 case SHAKE:
-                    cry();
+                    if (Math.random() > 0.55){
+                        cry();
+                    }
+                    else{
+                        calmDown();
+                    }
                     break;
 
-                case THROWN:
+                /*case THROWN:
                     die();
-                    break;
+                    break;*/
 
 
                 default:
@@ -91,14 +97,14 @@ public class Child extends Human implements Subscriber, Publisher{
     }
 
 
-    private void die(){
+/*    private void die() {
         System.out.println(this +  " died");
         isAlive = false;
         notifySubscribers(Stimul.DEATH);
 
 
         
-    }
+    }*/
 
     @Override 
     public boolean equals(Object obj){
