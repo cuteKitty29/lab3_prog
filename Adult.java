@@ -11,6 +11,7 @@ public class Adult extends Human implements Subscriber, Publisher{
     private boolean isSleep;
     private boolean isAlive;
     private int fearLevel;  
+    private int ID;
 
     public Adult(String name, State state, boolean isSleep, int fearLevel){
         super(name, state, isSleep, fearLevel);
@@ -19,30 +20,33 @@ public class Adult extends Human implements Subscriber, Publisher{
         this.selfControl = 100;
         this.listObjectsHands = new ArrayList<Object>();
         this.subscribers = new ArrayList<Subscriber>();
+        this.ID = MyObject.maxID++;
     }
     
     public int getSelfControl(){
         return this.selfControl;
     }
     
+    @Override
     public void subscribe(Subscriber subscriber){
         this.subscribers.add(subscriber);
     }
 
+    @Override
     public void unsubscribe(Subscriber subscriber){
         int indexObject = this.subscribers.indexOf(subscriber);
         this.subscribers.remove(indexObject);
     }
 
+    @Override
     public void notifySubscribers(Stimul stimul){
-        if (stimul == Stimul.SHAKE){
-            System.out.println("IT IS SHAKING");
-        }
+        System.out.println("Stimul is " + stimul);
         for (Subscriber subscriber: this.subscribers){
             subscriber.update(stimul);
         }
     }
 
+    @Override
     public void update(Stimul stimul){
         System.out.println("Update adult");
         react(stimul);
@@ -55,6 +59,7 @@ public class Adult extends Human implements Subscriber, Publisher{
 
             case CRY:
                 System.out.println("Stimul CRY ADULT REACT");
+                selfControl -= 50;
                 if (selfControl > 10){
                     tryComfort();
                     break;
@@ -84,6 +89,8 @@ public class Adult extends Human implements Subscriber, Publisher{
             case CALM:
                 ignore();
                 break;
+            case DEATH:
+                cry();
 
             default:
                 System.out.println("the stimulus is not perceived");
@@ -133,7 +140,7 @@ public class Adult extends Human implements Subscriber, Publisher{
     @Override
     public boolean equals(Object obj){
         if (obj instanceof Adult){
-            return true;
+            return obj.hashCode() == this.hashCode();
         }
         return false;
     }
@@ -141,6 +148,11 @@ public class Adult extends Human implements Subscriber, Publisher{
     @Override
     public String toString(){
         return "Adult" + name;
+    }
+
+    @Override
+    public int hashCode(){
+        return "Adult".length() * name.length() * ID;
     }
 
 }

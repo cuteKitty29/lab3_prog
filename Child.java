@@ -17,29 +17,29 @@ public class Child extends Human implements Subscriber, Publisher{
         super(name, state, isSleep, fearLevel);
         this.subscribers = new ArrayList<Subscriber>();
         childNose = new Nose();
-        childEyes = new Eyes(30, new Nothing());
+        EyeColor[] colors = new EyeColor[]{EyeColor.MIXED, EyeColor.OPAL_CREAM, EyeColor.OYSTER_GRAY};
+        childEyes = new Eyes(colors, new Nothing());
+        this.isAlive = true;
     }
-
+    @Override
     public void subscribe(Subscriber subscriber){
         this.subscribers.add(subscriber);
     }
-
+    @Override
     public void unsubscribe(Subscriber subscriber){
         int indexObject = this.subscribers.indexOf(subscriber);
         this.subscribers.remove(indexObject);
     }
-
+    @Override
     public void notifySubscribers(Stimul stimul){
         for (Subscriber subscriber: this.subscribers){
             subscriber.update(stimul);
         }
     }
 
+    @Override
     public void update(Stimul stimul){
-        System.out.println("Update child");
-        if (stimul == Stimul.SHAKE){
-            System.out.println("IT IS ");
-        }
+        System.out.println("Update child on stimul " + stimul);
         react(stimul);
     }
 
@@ -47,30 +47,32 @@ public class Child extends Human implements Subscriber, Publisher{
 
     @Override
     public void react(Stimul stimul){
+        if (isAlive){
+            switch (stimul){
 
-        switch (stimul){
+                case CRY:
+                    getScared();
+                    break;
+                    
+                case CALM:                
+                    ignore();
+                    break;
 
-            case CRY:
-                getScared();
-                break;
-                
-            case CALM:                
-                ignore();
-                break;
+                case SHAKE:
+                    cry();
+                    break;
 
-            case SHAKE:
-                cry();
-
-            case THROWN:
-                die();
-                break;
+                case THROWN:
+                    die();
+                    break;
 
 
-            default:
-                System.out.println("DEFAULT");
+                default:
+                    System.out.println("DEFAULT");
 
-                System.out.println("the stimulus is not perceived");
-                ignore();
+                    System.out.println("the stimulus is not perceived");
+                    ignore();
+            }
         }
     }
 
@@ -81,19 +83,21 @@ public class Child extends Human implements Subscriber, Publisher{
         childNose.wakeUp();
         childEyes.openEyes();
     }
-
+    @Override
     public void cry(){
         System.out.println("AAAAAAAAA");
         System.out.println("Child " + name + " is crying!");
         notifySubscribers(Stimul.CRY);
     }
 
-  //  @Override
+
     private void die(){
+        System.out.println(this +  " died");
+        isAlive = false;
         notifySubscribers(Stimul.DEATH);
-        for (Subscriber subscriber: subscribers){
-            unsubscribe(subscriber);
-        }
+
+
+        
     }
 
     @Override 

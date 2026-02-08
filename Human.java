@@ -51,9 +51,20 @@ public class Human extends Creature implements Subscriber, Publisher{
             target = new Nothing();
         }
 
-        public Eyes(int clr, MyObject tar){
-            clarity = clr;
+
+        public Eyes(EyeColor[] listColors){
+            clarity = 0;
+            isEyeOpen = false;
+            target = new Nothing();
+            eyeColor = listColors;
+        }
+
+        public Eyes(EyeColor[] listColors, MyObject tar){
             target = tar;
+            clarity = 0;
+            isEyeOpen = false;
+            target = new Nothing();
+            eyeColor = listColors;
         }
 
         public void openEyes(){

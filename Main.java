@@ -5,7 +5,8 @@ public class Main{
         myChild.subscribe(myAdult);
         myAdult.subscribe(myChild);
 
-        myChild.cry();
+        myChild.wakeUp();
+        myAdult.shake();
 
     }
 }

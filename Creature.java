@@ -4,7 +4,7 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
     public ArrayList<Subscriber> subscribers;  
     private ArrayList<Smell> smells;
     private State state;
-    private final String name;
+    private String name;
     private boolean isSleep;
     private boolean isAlive;
     private int fearLevel;
