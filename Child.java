@@ -9,8 +9,8 @@ public class Child extends Human implements Subscriber, Publisher{
     private boolean isSleep;
     private boolean isAlive;
     private int fearLevel;  
-    private Nose childNose;
-    private Eyes childEyes;
+    public Nose childNose;
+    public Eyes childEyes;
 
 
     public Child(String name, State state, boolean isSleep, int fearLevel){
@@ -19,9 +19,10 @@ public class Child extends Human implements Subscriber, Publisher{
         this.subscribers = new ArrayList<Subscriber>();
         childNose = new Nose();
         EyeColor[] colors = new EyeColor[]{EyeColor.MIXED, EyeColor.OPAL_CREAM, EyeColor.OYSTER_GRAY};
-        childEyes = new Eyes(colors, new Nothing());
+        childEyes = new Eyes(colors, Nothing.getInstance());
         this.isAlive = true;
     }
+    
     @Override
     public void subscribe(Subscriber subscriber){
         this.subscribers.add(subscriber);

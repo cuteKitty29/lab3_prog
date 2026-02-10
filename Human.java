@@ -7,8 +7,8 @@ public class Human extends Creature implements Subscriber, Publisher{
     private boolean isSleep;
     private boolean isAlive;
     private int fearLevel;
-    private  Nose humanNose;
-    private  Eyes humanEyes;
+    public  Nose humanNose;
+    public  Eyes humanEyes;
     private  int ID;
     private int freezingLevel;
 
@@ -48,14 +48,14 @@ public class Human extends Creature implements Subscriber, Publisher{
         public Eyes(){
             clarity = 0;
             isEyeOpen = false;
-            target = new Nothing();
+            target = Nothing.getInstance();
         }
 
 
         public Eyes(EyeColor[] listColors){
             clarity = 0;
             isEyeOpen = false;
-            target = new Nothing();
+            target = Nothing.getInstance();
             eyeColor = listColors;
         }
 
@@ -63,7 +63,7 @@ public class Human extends Creature implements Subscriber, Publisher{
             target = tar;
             clarity = 0;
             isEyeOpen = false;
-            target = new Nothing();
+            target = Nothing.getInstance();
             eyeColor = listColors;
         }
 
@@ -116,7 +116,7 @@ public class Human extends Creature implements Subscriber, Publisher{
         public Nose(){
             sensitivity = 0;
             isSleep = true;
-            target = new Nothing();
+            target = Nothing.getInstance();
         }
 
         public void wakeUp(){
@@ -160,6 +160,10 @@ public class Human extends Creature implements Subscriber, Publisher{
         public void changeTarget(MyObject obj){
             target = obj;
             System.out.println("The target was changed on" + obj.toString());
+        }
+
+        public boolean  isObjectTarget(MyObject obj){
+            return target.equals(obj);
         }
     }
 
@@ -211,6 +215,7 @@ public class Human extends Creature implements Subscriber, Publisher{
 
     public void changeFreezingLevel(int change){
         freezingLevel += change;
+        System.out.println("The freezing level changed on " + change);
     }
 
     public void feelChill(){

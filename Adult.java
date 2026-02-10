@@ -4,7 +4,7 @@ public class Adult extends Human implements Subscriber, Publisher, Smellable{
     private int selfControl;
     private int disgustLevel;
     private int panicLevel;
-    private ArrayList<Object> listObjectsHands;
+    //private ArrayList<Object> listObjectsHands;
     private ArrayList<Smell> smells;
     private ArrayList<Subscriber> subscribers;
     private State state;
@@ -13,16 +13,24 @@ public class Adult extends Human implements Subscriber, Publisher, Smellable{
     private boolean isAlive;
     private int fearLevel;  
     private int ID;
+    private int freezingLevel;
+    public Nose adultNose;
+    public Eyes adultEyes;
 
     public Adult(String name, State state, boolean isSleep, int fearLevel){
         super(name, state, isSleep, fearLevel);
         this.name = name;
+        this.state = state;
         this.disgustLevel = 0;
         this.panicLevel = 0;
         this.selfControl = 100;
-        this.listObjectsHands = new ArrayList<Object>();
+        this.freezingLevel = 0;
+      //  this.listObjectsHands = new ArrayList<Object>();
         this.subscribers = new ArrayList<Subscriber>();
         this.ID = MyObject.maxID++;
+        this.smells = new ArrayList<Smell>();
+        this.adultEyes = new Eyes();
+        this.adultNose = new Nose();
     }
     
     public int getSelfControl(){
@@ -132,7 +140,8 @@ public class Adult extends Human implements Subscriber, Publisher, Smellable{
         if (Math.random() > 40){
             changeDisgustingLevel(20);
         }
-        return smells;
+        System.out.println(smells);
+        return this.smells;
     }
     
     public void shake(){
@@ -143,6 +152,16 @@ public class Adult extends Human implements Subscriber, Publisher, Smellable{
     private void throwChild() throws ChildDiedException{
         System.out.println(this + " has thrown the child!!!");
         throw new ChildDiedException("Child was thrown and died!!!");
+    }
+
+    public void putSmtInBasket(Basket basket, MyObject obj){
+        try{
+            basket.putSmtIn(obj);
+        }
+        catch (BasketIsFullException e){
+            System.out.println(e.getMessage());
+            System.out.println("There is in the basket" + basket.knowConten());
+        }
     }
 
     public void setSmtOnTable(MyObject obj, Table tbl){
@@ -173,7 +192,7 @@ public class Adult extends Human implements Subscriber, Publisher, Smellable{
     
     @Override
     public String toString(){
-        return "Adult" + name;
+        return "Adult " + name;
     }
 
     @Override

@@ -2,10 +2,11 @@ public class Basket extends MyObject{
     private MyObject content;
 
     public Basket(){
-        content = new Nothing();
+        content = Nothing.getInstance();
     }
 
     public Basket(MyObject obj){
+        super();
         content = obj;
     }
 
@@ -25,8 +26,11 @@ public class Basket extends MyObject{
         }
         else{
             MyObject prvContent = content;
-            content = new Nothing();
+            content = Nothing.getInstance();
             return prvContent;
         }
+    }
+    public MyObject knowConten(){
+        return content;
     }
 }

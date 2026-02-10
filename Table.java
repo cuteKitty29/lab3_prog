@@ -8,6 +8,7 @@ public class Table extends  MyObject{
     private boolean isTableFool;
 
     public Table(){
+        super();
         this.ID = MyObject.maxID++;
         this.listOfContent = new ArrayList<MyObject>();
         this.isTableFool = false;
@@ -34,6 +35,6 @@ public class Table extends  MyObject{
         if (listOfContent.remove(obj)){
             return obj;
         }
-        return new Nothing();
+        return Nothing.getInstance();
     }
 }

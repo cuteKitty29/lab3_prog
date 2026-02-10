@@ -20,6 +20,7 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
         this.fearLevel = fearLevel;
         this.ID = MyObject.maxID++;
         this.freezingLevel = 0;
+        this.smells = new ArrayList<Smell>();
     }
 
 
@@ -54,11 +55,9 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
         return state;
     }
 
-    public ArrayList<Smell> stink(){
-        for (Smell s : smells) {
-            System.out.println(this + " skinks " + s);                    
-        }
-        return smells;
+    public void stink(Smell s){
+        System.out.println(toString() + " stink " + s);
+        this.smells.add(s);
     }
 
     public void wakeUp(){
@@ -134,7 +133,7 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
             } 
         }
         else{
-            System.out.println("Creature" + name + "is died!!!");
+            System.out.println(this + "is died!!!");
         }  
     }
     @Override
@@ -144,11 +143,11 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
 
 
     public void ignore(){
-        System.out.println("Creature" + name + " does nothing");
+        System.out.println(this + " does nothing");
     }
 
     public void getScared(){
-        System.out.println("Creature " + name + " got scared");
+        System.out.println(this + " got scared");
         this.fearLevel += 10;
         if (fearLevel > 78){
             changeState(State.PANIC);
@@ -168,13 +167,13 @@ public class Creature extends MyObject implements Publisher, Subscriber, Smellab
     public void cry(){
         changeState(State.CRY);
         System.out.println("UA UA UA UA");
-        System.out.println("Creature " + name + " is crying!");
+        System.out.println(this + " is crying!");
         notifySubscribers(Stimul.CRY);
     }
 
     public void shout(){
         System.out.println("AAAAAAAA");
-        System.out.println("Creature " + name + " is shouting!");
+        System.out.println(this + " is shouting!");
 
         notifySubscribers(Stimul.SHOUT);
     }
