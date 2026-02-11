@@ -4,7 +4,6 @@ public class Adult extends Human implements Subscriber, Publisher, Smellable{
     private int selfControl;
     private int disgustLevel;
     private int panicLevel;
-    //private ArrayList<Object> listObjectsHands;
     private ArrayList<Smell> smells;
     private ArrayList<Subscriber> subscribers;
     private State state;
@@ -25,7 +24,6 @@ public class Adult extends Human implements Subscriber, Publisher, Smellable{
         this.panicLevel = 0;
         this.selfControl = 100;
         this.freezingLevel = 0;
-      //  this.listObjectsHands = new ArrayList<Object>();
         this.subscribers = new ArrayList<Subscriber>();
         this.ID = MyObject.maxID++;
         this.smells = new ArrayList<Smell>();
@@ -115,7 +113,6 @@ public class Adult extends Human implements Subscriber, Publisher, Smellable{
 
     private void comrfortWords(){
         System.out.println(name + " try to comfort with words");
-        //notifySubscribers(Stimul.COMFORT_WITH_WORDS);
     }
 
     private void tryComfort(){
